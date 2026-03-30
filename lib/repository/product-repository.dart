@@ -12,4 +12,11 @@ class ProductRepository {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+  Future<List<Product>> getAll() async {
+    final List<Map<String, dynamic>> maps = await database.query(
+      ProductFillable.table,
+    );
+    return List.generate(maps.length, (i) => Product.fromMap(maps[i]));
+  }
 }
