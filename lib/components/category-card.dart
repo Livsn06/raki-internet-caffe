@@ -10,13 +10,19 @@ class CategoryCard extends StatelessWidget {
     required this.categories,
     required this.index,
     required this.pageProvider,
+    required this.cardWidth,
+    required this.cardHeight,
   });
   final ProductPageViewProvider pageProvider;
   final List<Category> categories;
   final int index;
+  final double cardWidth;
+  final double cardHeight;
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: cardWidth,
+      height: cardHeight,
       decoration: BoxDecoration(
         border: Border.all(
           color: pageProvider.currentIndex == index
@@ -45,7 +51,7 @@ class CategoryCard extends StatelessWidget {
             categories[index].name,
             style: TextStyle(
               color: Colors.black,
-              fontSize: 13,
+              fontSize: cardWidth / 8,
               fontWeight: FontWeight.bold,
             ),
           ),

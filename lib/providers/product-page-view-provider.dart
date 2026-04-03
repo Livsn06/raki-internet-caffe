@@ -17,7 +17,7 @@ class ProductPageViewProvider extends ChangeNotifier {
     _currentIndex = index;
     _pageController.animateToPage(
       index,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 10),
       curve: Curves.easeInOut,
     );
     notifyListeners();
