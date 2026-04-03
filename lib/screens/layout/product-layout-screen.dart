@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:raki_internet_cafe/components/category-card.dart';
+import 'package:raki_internet_cafe/core/routing-controls.dart';
 import 'package:raki_internet_cafe/core/ui-colors.dart';
 import 'package:raki_internet_cafe/providers/category-provider.dart';
 import 'package:raki_internet_cafe/providers/product-page-view-provider.dart';
@@ -14,6 +15,7 @@ class ProductLayoutScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: UIColors.backgroundColor,
       appBar: AppBar(
+        foregroundColor: Colors.white,
         centerTitle: true,
         title: const Text(
           "Menu",
@@ -22,7 +24,9 @@ class ProductLayoutScreen extends StatelessWidget {
         backgroundColor: Colors.black,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              RouteControls.push(context, RouteScreens.adminAuthScreen);
+            },
             icon: const Icon(Icons.person, color: Colors.white),
           ),
         ],
