@@ -5,9 +5,6 @@ import 'package:raki_internet_cafe/core/ui-colors.dart';
 import 'package:raki_internet_cafe/providers/category-provider.dart';
 import 'package:raki_internet_cafe/providers/product-page-view-provider.dart';
 import 'package:raki_internet_cafe/providers/product-provider.dart';
-import 'package:raki_internet_cafe/utils/gap.dart';
-
-import '../../helper/asset-helper.dart';
 
 class ProductLayoutScreen extends StatelessWidget {
   const ProductLayoutScreen({super.key});
@@ -51,6 +48,7 @@ class ContentSection extends StatelessWidget {
     return Flexible(
       flex: 5,
       child: PageView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
         itemBuilder: (context, index) => ProductSection(),
         itemCount: categories.length,
@@ -156,7 +154,7 @@ class ProductSection extends StatelessWidget {
                       flex: 3,
                       child: Center(
                         child: Image.asset(
-                          AssetHelper.getAssetPath(AssetItems.appIcon),
+                          selectedProducts[index].imagePath,
                           fit: BoxFit.contain,
                         ),
                       ),
