@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:raki_internet_cafe/models/admin-model.dart';
 import 'package:raki_internet_cafe/models/category-model.dart';
 import 'package:raki_internet_cafe/models/product-model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -34,6 +35,7 @@ class DBHelper {
       onCreate: (db, version) async {
         await createCategoryTable(db);
         await createProductTable(db);
+        await createAdminTable(db);
       },
     );
     return _database!;
@@ -61,6 +63,15 @@ class DBHelper {
             ${ProductFillable.price} REAL NOT NULL,
             ${ProductFillable.imagePath} TEXT NOT NULL,
             FOREIGN KEY (${ProductFillable.catId}) REFERENCES ${CategoryFillable.table}(${CategoryFillable.id})
+          )
+        ''');
+  }
+
+  Future<void> createAdminTable(Database db) async {
+    await db.execute('''
+          CREATE TABLE ${AdminFillable.table} (
+            ${AdminFillable.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+            ${AdminFillable.password} TEXT NOT NULL
           )
         ''');
   }
