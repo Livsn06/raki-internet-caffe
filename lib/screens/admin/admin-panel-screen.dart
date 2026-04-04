@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:raki_internet_cafe/components/card-tile-button.dart';
+import 'package:raki_internet_cafe/core/routing-controls.dart';
 
 class AdminPanelScreen extends StatelessWidget {
   const AdminPanelScreen({super.key});
@@ -13,7 +14,9 @@ class AdminPanelScreen extends StatelessWidget {
           icon: Icons.person,
           foregroundColor: Colors.white,
           backgroundColor: Colors.black,
-          onTap: () {},
+          onTap: () {
+            RouteControls.push(context, RouteScreens.profileScreen);
+          },
         ),
         CardTileButton(
           title: 'Products',
