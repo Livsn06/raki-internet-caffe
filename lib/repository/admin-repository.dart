@@ -18,6 +18,18 @@ class AdminRepository {
     return result.isNotEmpty;
   }
 
+  Future<bool> updatePassword({required String password}) async {
+    final db = await DBHelper.instance.database;
+    final result = await db.update(
+      AdminFillable.table,
+      {AdminFillable.password: password},
+      where: '${AdminFillable.id} = ?',
+      whereArgs: [1],
+    );
+
+    return result > 0; // Return true if at least one row was updated
+  }
+
   Future<void> createAdmin({required String password}) async {
     final db = await DBHelper.instance.database;
     log('Seeding admin...');

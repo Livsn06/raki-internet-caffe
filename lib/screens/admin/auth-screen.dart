@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:raki_internet_cafe/components/app-logo.dart';
 import 'package:raki_internet_cafe/components/password-form-field.dart';
+import 'package:raki_internet_cafe/components/primary-button.dart';
 import 'package:raki_internet_cafe/core/routing-controls.dart';
 import 'package:raki_internet_cafe/core/ui-colors.dart';
 import 'package:raki_internet_cafe/providers/admin-auth-provider.dart';
@@ -21,8 +22,12 @@ class AuthScreen extends StatelessWidget {
     Future<void> authorize() async {
       final isAuthorized = await authProvider.authorize();
       if (isAuthorized) {
+        authProvider.resetProvider();
         if (!context.mounted) return;
-        RouteControls.pushAndRemoveUntil(context, RouteScreens.adminPanel);
+        RouteControls.pushAndRemoveUntil(
+          context,
+          RouteScreens.adminPanelScreen,
+        );
         return;
       } else {
         if (!context.mounted) return;
@@ -60,6 +65,7 @@ class AuthScreen extends StatelessWidget {
               ),
               vGap(16),
               PasswordFormField(
+                label: "Password",
                 controller: password,
                 isLoading: isLoading,
                 isShowPassword: isShowPassword,
@@ -67,24 +73,13 @@ class AuthScreen extends StatelessWidget {
                 validator: authProvider.passwordValidator,
               ),
               vGap(24),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: isLoading
-                    ? null
-                    : () async {
-                        await authorize();
-                      },
-                child: Text(
-                  isLoading
-                      ? "Authorizing..."
-                      : "Authorize & Access Admin Panel",
-                ),
+              PrimaryButton(
+                label: "Authorize & Access Admin Panel",
+                loadingLabel: "Authorizing...",
+                onTap: () async {
+                  await authorize();
+                },
+                isLoading: isLoading,
               ),
             ],
           ),
