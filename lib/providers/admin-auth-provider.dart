@@ -18,6 +18,11 @@ class AdminAuthProvider extends ChangeNotifier {
     return isAuthorized;
   }
 
+  // Future <void> logout() async {
+  //   final database = await DBHelper.instance.database;
+  //   final repo = AdminRepository(database: database);
+  // }
+
   String? passwordValidator(String? value) {
     if (value == null || value.isEmpty) {
       return "Password is required";
