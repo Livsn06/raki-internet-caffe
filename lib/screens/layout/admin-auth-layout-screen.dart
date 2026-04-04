@@ -16,7 +16,10 @@ class AdminAuthLayoutScreen extends StatelessWidget {
         leading: IconButton(
           onPressed: () {
             context.read<AdminAuthProvider>().resetProvider();
-            RouteControls.pop(context);
+            RouteControls.pushAndRemoveUntil(
+              context,
+              RouteScreens.productScreen,
+            );
           },
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
