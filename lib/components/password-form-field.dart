@@ -4,12 +4,14 @@ class PasswordFormField extends StatelessWidget {
   const PasswordFormField({
     super.key,
     required this.controller,
+    required this.label,
     this.isShowPassword = false,
     this.isLoading = false,
     this.toggleShowPassword,
     this.validator,
   });
   final TextEditingController controller;
+  final String label;
   final bool isShowPassword;
   final bool isLoading;
   final Function()? toggleShowPassword;
@@ -20,7 +22,7 @@ class PasswordFormField extends StatelessWidget {
       controller: controller,
       readOnly: isLoading,
       decoration: InputDecoration(
-        labelText: "Password",
+        labelText: label,
         border: OutlineInputBorder(),
         suffixIcon: IconButton(
           onPressed: toggleShowPassword,
