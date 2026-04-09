@@ -23,7 +23,9 @@ class AdminPanelScreen extends StatelessWidget {
           icon: Icons.sell,
           foregroundColor: Colors.white,
           backgroundColor: Colors.green,
-          onTap: () {},
+          onTap: () {
+            RouteControls.push(context, RouteScreens.adminProductScreen);
+          },
         ),
         CardTileButton(
           title: 'Orders',
