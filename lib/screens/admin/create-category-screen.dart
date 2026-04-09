@@ -21,14 +21,15 @@ class CreateCategoryScreen extends StatelessWidget {
 
     void create() async {
       final success = await createCategoryProvider.createCategory();
-      if (!context.mounted) return;
 
       if (success) {
         await categoryProvider.refresh();
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Category created successfully!")),
         );
       } else {
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(

@@ -1,8 +1,6 @@
 import 'dart:developer';
 
 import 'package:raki_internet_cafe/seeders/admin-seeder.dart';
-import 'package:raki_internet_cafe/seeders/category-seeder.dart';
-import 'package:raki_internet_cafe/seeders/product-seeder.dart';
 
 class DatabaseSeeder {
   DatabaseSeeder._();
