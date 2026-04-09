@@ -9,8 +9,8 @@ class DatabaseSeeder {
 
   static Future<void> seed() async {
     log('Seeding database...');
-    await CategorySeeder.seed();
-    await ProductSeeder.seed();
+    // await CategorySeeder.seed();
+    // await ProductSeeder.seed();
     await AdminSeeder.seed();
     log('Database seeded.');
   }
