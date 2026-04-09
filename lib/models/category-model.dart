@@ -38,4 +38,13 @@ class Category {
     createdAt = map[CategoryFillable.createdAt];
     updatedAt = map[CategoryFillable.updatedAt];
   }
+
+  Map<String, dynamic> newItemMap() {
+    return {
+      CategoryFillable.name: name,
+      CategoryFillable.imagePath: imagePath,
+      CategoryFillable.createdAt: createdAt,
+      CategoryFillable.updatedAt: updatedAt,
+    };
+  }
 }
