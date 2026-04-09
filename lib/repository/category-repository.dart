@@ -6,12 +6,24 @@ class CategoryRepository {
   final Database database;
   CategoryRepository({required this.database});
 
-  Future<void> insert(Category category) async {
-    await database.insert(
+  Future<bool> insert(Category category) async {
+    final result = await database.insert(
       CategoryFillable.table,
-      category.toMap(),
+      category.newItemMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+
+    return result > 0;
+  }
+
+  Future<int> insertAndReturnID(Category variety) async {
+    final id = await database.insert(
+      CategoryFillable.table,
+      variety.newItemMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+
+    return id;
   }
 
   Future<List<Category>> getAll() async {
