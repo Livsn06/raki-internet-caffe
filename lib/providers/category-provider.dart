@@ -28,4 +28,10 @@ class CategoryProvider extends ChangeNotifier {
     _categories = await repo.getAll();
     notifyListeners();
   }
+
+  Future<bool> deleteCategory(int catId) async {
+    final database = await DBHelper.instance.database;
+    final repo = CategoryRepository(database: database);
+    return await repo.delete(catId);
+  }
 }

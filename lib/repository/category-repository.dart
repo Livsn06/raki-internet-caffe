@@ -16,6 +16,16 @@ class CategoryRepository {
     return result > 0;
   }
 
+  Future<bool> update(Category category) async {
+    final result = await database.update(
+      CategoryFillable.table,
+      category.newItemMap(),
+      where: '${CategoryFillable.id} = ?',
+      whereArgs: [category.id],
+    );
+    return result > 0;
+  }
+
   Future<int> insertAndReturnID(Category variety) async {
     final id = await database.insert(
       CategoryFillable.table,
@@ -35,5 +45,14 @@ class CategoryRepository {
     return List.generate(maps.length, (i) {
       return Category.fromMap(maps[i]);
     });
+  }
+
+  Future<bool> delete(int catId) async {
+    final result = await database.delete(
+      CategoryFillable.table,
+      where: '${CategoryFillable.id} = ?',
+      whereArgs: [catId],
+    );
+    return result > 0;
   }
 }
