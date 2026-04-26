@@ -3,12 +3,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:raki_internet_cafe/helper/db-helper.dart';
 import 'package:raki_internet_cafe/helper/document-helper.dart';
 import 'package:raki_internet_cafe/helper/folder-helper.dart';
-import 'package:raki_internet_cafe/models/category-model.dart';
-import 'package:raki_internet_cafe/repository/category-repository.dart';
+import 'package:raki_internet_cafe/models/product-model.dart';
+import 'package:raki_internet_cafe/repository/product-repository.dart';
 
-class CreateCategoryProvider extends ChangeNotifier {
+class CreateProductProvider extends ChangeNotifier {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final name = TextEditingController();
+  final price = TextEditingController();
+  final variantLabel = TextEditingController();
   XFile? imageFile;
   bool isLoading = false;
 
@@ -24,8 +26,27 @@ class CreateCategoryProvider extends ChangeNotifier {
     return null;
   }
 
+  String? validatePrice(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Price is required";
+    }
+    if (double.tryParse(value) == null) {
+      return "Invalid price format";
+    }
+    return null;
+  }
+
+  String? validateVariantLabel(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Variant label is required";
+    }
+    return null;
+  }
+
   void resetProvider() async {
     name.clear();
+    price.clear();
+    variantLabel.clear();
     imageFile = null;
     isLoading = false;
     notifyListeners();
@@ -36,13 +57,13 @@ class CreateCategoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> createCategory() async {
+  Future<bool> createProduct(int categoryId) async {
     setLoading(true);
     if (!formKey.currentState!.validate()) return false;
     if (imageFile == null) return false;
 
     final database = await DBHelper.instance.database;
-    final repo = CategoryRepository(database: database);
+    final repo = ProductRepository(database: database);
     final docHelper = DocumentHelper.instance;
 
     String path = '';
@@ -53,21 +74,21 @@ class CreateCategoryProvider extends ChangeNotifier {
       );
     }
 
-    final category = Category(
+    final product = Product(
       id: 0,
       name: name.text,
       imagePath: path,
-      createdAt: DateTime.now().toIso8601String(),
-      updatedAt: DateTime.now().toIso8601String(),
+      catId: categoryId,
+      variantLabel: variantLabel.text,
+      price: double.tryParse(price.text) ?? 0,
     );
 
-    final success = await repo.insert(category);
+    final success = await repo.insert(product);
 
     if (success) {
       resetProvider();
       return true;
     }
-
     setLoading(false);
     return false;
   }

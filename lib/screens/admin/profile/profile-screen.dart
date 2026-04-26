@@ -2,12 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:raki_internet_cafe/components/password-form-field.dart';
 import 'package:raki_internet_cafe/components/primary-button.dart';
-import 'package:raki_internet_cafe/core/routing-controls.dart';
+import 'package:raki_internet_cafe/core/ui-colors.dart';
 import 'package:raki_internet_cafe/providers/admin-profile-provider.dart';
+import 'package:raki_internet_cafe/screens/admin/auth-screen.dart';
 import 'package:raki_internet_cafe/utils/gap.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: UIColors.backgroundColor,
+      appBar: AppBar(
+        foregroundColor: Colors.white,
+        centerTitle: true,
+        title: const Text(
+          "Profile",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.black,
+      ),
+      body: ProfileScreenBody(),
+    );
+  }
+}
+
+class ProfileScreenBody extends StatelessWidget {
+  const ProfileScreenBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +53,10 @@ class ProfileScreen extends StatelessWidget {
         authProvider.resetProvider();
 
         if (!context.mounted) return;
-        RouteControls.pushAndRemoveUntil(context, RouteScreens.adminAuthScreen);
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const AuthScreen()),
+          (route) => false,
+        );
         return;
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

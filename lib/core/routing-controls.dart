@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:raki_internet_cafe/screens/layout/admin-auth-layout-screen.dart';
 import 'package:raki_internet_cafe/screens/layout/admin-panel-layout.dart';
-import 'package:raki_internet_cafe/screens/layout/admin-product-layout-screen.dart';
-import 'package:raki_internet_cafe/screens/layout/create-product-category-layout-screen.dart';
-import 'package:raki_internet_cafe/screens/layout/profile-layout-screen.dart';
 
 import '../screens/layout/product-layout-screen.dart';
 
@@ -40,10 +36,5 @@ class RouteControls {
 class RouteScreens {
   RouteScreens._();
   static const productScreen = ProductLayoutScreen();
-  static const adminAuthScreen = AdminAuthLayoutScreen();
   static const adminPanelScreen = AdminPanelLayout();
-  static const profileScreen = ProfileLayoutScreen();
-  static const adminProductScreen = AdminProductLayoutScreen();
-  static const createProductCategoryScreen =
-      CreateProductCategoryLayoutScreen();
 }

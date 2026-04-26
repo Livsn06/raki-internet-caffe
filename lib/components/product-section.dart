@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:raki_internet_cafe/core/ui-colors.dart';
@@ -46,9 +48,9 @@ class ProductSection extends StatelessWidget {
                     Flexible(
                       flex: 3,
                       child: Center(
-                        child: Image.asset(
-                          selectedProducts[index].imagePath,
-                          fit: BoxFit.contain,
+                        child: Image.file(
+                          File(selectedProducts[index].imagePath),
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),

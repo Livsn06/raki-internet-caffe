@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:raki_internet_cafe/components/cart-section.dart';
 import 'package:raki_internet_cafe/components/product-category-section.dart';
 import 'package:raki_internet_cafe/components/product-content-section.dart';
-import 'package:raki_internet_cafe/core/routing-controls.dart';
 import 'package:raki_internet_cafe/core/ui-colors.dart';
+import 'package:raki_internet_cafe/screens/admin/auth-screen.dart';
 
 class ProductLayoutScreen extends StatelessWidget {
   const ProductLayoutScreen({super.key});
@@ -23,7 +23,9 @@ class ProductLayoutScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              RouteControls.push(context, RouteScreens.adminAuthScreen);
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => AuthScreen()));
             },
             icon: const Icon(Icons.person, color: Colors.white),
           ),
