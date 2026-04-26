@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:raki_internet_cafe/core/ui-colors.dart';
+import 'package:raki_internet_cafe/models/cart-item-model.dart';
+import 'package:raki_internet_cafe/providers/cart-provider.dart';
 import 'package:raki_internet_cafe/providers/category-provider.dart';
 import 'package:raki_internet_cafe/providers/product-provider.dart';
 
@@ -15,6 +17,8 @@ class ProductSection extends StatelessWidget {
     final productProvider = context.read<ProductProvider>();
 
     final selectedProducts = productProvider.getProductsByCategory(categoryID);
+
+    final cartProvider = context.read<CartProvider>();
 
     if (selectedProducts.isEmpty) {
       return const Center(child: Text("No products found."));
@@ -30,7 +34,9 @@ class ProductSection extends StatelessWidget {
       itemBuilder: (context, index) => LayoutBuilder(
         builder: (context, constraints) {
           double scale = constraints.maxWidth / 130;
-
+          final isInCart = context.watch<CartProvider>().isInCart(
+            selectedProducts[index].id,
+          );
           return Container(
             margin: const EdgeInsets.all(8.0),
             padding: EdgeInsets.all(4.0 * scale),
@@ -89,29 +95,52 @@ class ProductSection extends StatelessWidget {
 
                             // Responsive Button
                             InkWell(
-                              onTap: () {},
+                              onTap: isInCart
+                                  ? null
+                                  : () {
+                                      final newItem = CartItem(
+                                        id: DateTime.now()
+                                            .millisecondsSinceEpoch,
+                                        productId: selectedProducts[index].id,
+                                        productName:
+                                            selectedProducts[index].name,
+                                        productImagePath:
+                                            selectedProducts[index].imagePath,
+                                        variantLabel: selectedProducts[index]
+                                            .variantLabel,
+                                        price: selectedProducts[index].price,
+                                        quantity: 1,
+                                      );
+                                      cartProvider.addToCart(newItem);
+                                    },
                               child: Container(
                                 alignment: Alignment.center,
                                 padding: EdgeInsets.symmetric(
                                   vertical: 6 * scale,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: UIColors.secondaryColor.withValues(
-                                    alpha: 0.2,
-                                  ),
+                                  color: isInCart
+                                      ? Colors.grey.shade300
+                                      : UIColors.secondaryColor.withValues(
+                                          alpha: 0.2,
+                                        ),
                                   borderRadius: BorderRadius.circular(
                                     4 * scale,
                                   ),
                                   border: Border.all(
-                                    color: UIColors.secondaryColor,
+                                    color: isInCart
+                                        ? Colors.grey
+                                        : UIColors.secondaryColor,
                                     width: 1,
                                   ),
                                 ),
                                 child: Text(
-                                  "Add",
+                                  isInCart ? "Added" : "Add",
                                   style: TextStyle(
                                     fontSize: 12 * scale, // Responsive font
-                                    color: Colors.grey,
+                                    color: isInCart
+                                        ? Colors.grey.shade700
+                                        : UIColors.secondaryColor,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),

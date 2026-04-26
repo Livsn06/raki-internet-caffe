@@ -8,8 +8,8 @@ import 'seeders/database-seeder.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DBHelper.instance.deleteDatabase();
-  await DatabaseSeeder.seed();
+  // await DBHelper.instance.deleteDatabase();
+  // await DatabaseSeeder.seed();
   runApp(const MainApp());
 }
 

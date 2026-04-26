@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:raki_internet_cafe/core/ui-colors.dart';
+import 'package:raki_internet_cafe/providers/cart-provider.dart';
+import 'package:raki_internet_cafe/screens/client/cart-screen.dart';
 
 class CartSection extends StatelessWidget {
   const CartSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = context.watch<CartProvider>();
+
     return Container(
       padding: const EdgeInsets.all(14.0),
       width: double.infinity,
@@ -18,8 +23,12 @@ class CartSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0),
           ),
         ),
-        onPressed: () {},
-        label: const Text("View Cart"),
+        onPressed: () {
+          Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (context) => const CartScreen()));
+        },
+        label: Text("${cartProvider.cartItems.length} Cart"),
         icon: const Icon(Icons.shopping_cart),
       ),
     );

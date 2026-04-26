@@ -5,8 +5,8 @@ import 'package:raki_internet_cafe/components/product-content-section.dart';
 import 'package:raki_internet_cafe/core/ui-colors.dart';
 import 'package:raki_internet_cafe/screens/admin/auth-screen.dart';
 
-class ProductLayoutScreen extends StatelessWidget {
-  const ProductLayoutScreen({super.key});
+class ProductScreen extends StatelessWidget {
+  const ProductScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

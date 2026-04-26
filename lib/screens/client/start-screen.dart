@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:raki_internet_cafe/core/ui-colors.dart';
+import 'package:raki_internet_cafe/screens/layout/product-screen.dart';
 
 import '../../components/app-logo.dart';
 import '../../components/app-title.dart';
@@ -13,7 +14,9 @@ class StartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => {
-        RouteControls.pushReplacement(context, RouteScreens.productScreen),
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const ProductScreen()),
+        ),
       },
       child: Container(
         decoration: const BoxDecoration(

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:raki_internet_cafe/screens/layout/admin-panel-layout.dart';
 
-import '../screens/layout/product-layout-screen.dart';
-
 class RouteControls {
   RouteControls._();
 
@@ -35,6 +33,5 @@ class RouteControls {
 
 class RouteScreens {
   RouteScreens._();
-  static const productScreen = ProductLayoutScreen();
   static const adminPanelScreen = AdminPanelLayout();
 }

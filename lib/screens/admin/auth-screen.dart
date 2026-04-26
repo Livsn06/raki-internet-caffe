@@ -6,6 +6,7 @@ import 'package:raki_internet_cafe/components/primary-button.dart';
 import 'package:raki_internet_cafe/core/routing-controls.dart';
 import 'package:raki_internet_cafe/core/ui-colors.dart';
 import 'package:raki_internet_cafe/providers/admin-auth-provider.dart';
+import 'package:raki_internet_cafe/screens/layout/product-screen.dart';
 import 'package:raki_internet_cafe/utils/gap.dart';
 
 class AuthScreen extends StatelessWidget {
@@ -19,10 +20,7 @@ class AuthScreen extends StatelessWidget {
         leading: IconButton(
           onPressed: () {
             context.read<AdminAuthProvider>().resetProvider();
-            RouteControls.pushAndRemoveUntil(
-              context,
-              RouteScreens.productScreen,
-            );
+            RouteControls.pushAndRemoveUntil(context, ProductScreen());
           },
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),

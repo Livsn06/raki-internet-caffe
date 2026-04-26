@@ -2,6 +2,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:raki_internet_cafe/providers/admin-auth-provider.dart';
 import 'package:raki_internet_cafe/providers/admin-profile-provider.dart';
+import 'package:raki_internet_cafe/providers/cart-provider.dart';
 import 'package:raki_internet_cafe/providers/category-provider.dart';
 import 'package:raki_internet_cafe/providers/create-category-provider.dart';
 import 'package:raki_internet_cafe/providers/create-product-provider.dart';
@@ -31,5 +32,6 @@ class ProviderInitializer {
     ChangeNotifierProvider(create: (_) => EditCategoryProvider()),
     ChangeNotifierProvider(create: (_) => CreateProductProvider()),
     ChangeNotifierProvider(create: (_) => EditProductProvider()),
+    ChangeNotifierProvider(create: (_) => CartProvider()),
   ];
 }

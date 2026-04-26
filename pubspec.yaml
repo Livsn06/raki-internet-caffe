@@ -7,6 +7,7 @@ environment:
   sdk: ^3.10.8
 
 dependencies:
+  counter_button: ^1.0.1
   flutter:
     sdk: flutter
   image_picker: ^1.2.1
