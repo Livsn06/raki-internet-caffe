@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:raki_internet_cafe/core/routing-controls.dart';
 import 'package:raki_internet_cafe/providers/admin-auth-provider.dart';
 import 'package:raki_internet_cafe/screens/admin/admin-panel-screen.dart';
+import 'package:raki_internet_cafe/screens/admin/auth-screen.dart';
 import 'package:raki_internet_cafe/utils/warrning-modal.dart';
 
 class AdminPanelLayout extends StatelessWidget {
@@ -28,9 +28,9 @@ class AdminPanelLayout extends StatelessWidget {
           MaterialButton(
             onPressed: () {
               authProvider.resetProvider();
-              RouteControls.pushAndRemoveUntil(
-                context,
-                RouteScreens.adminAuthScreen,
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const AuthScreen()),
+                (route) => false,
               );
             },
             color: Colors.red,

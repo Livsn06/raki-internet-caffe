@@ -3,12 +3,34 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:raki_internet_cafe/components/primary-button.dart';
+import 'package:raki_internet_cafe/core/ui-colors.dart';
 import 'package:raki_internet_cafe/providers/category-provider.dart';
 import 'package:raki_internet_cafe/providers/create-category-provider.dart';
 import 'package:raki_internet_cafe/utils/gap.dart';
 
 class CreateCategoryScreen extends StatelessWidget {
   const CreateCategoryScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: UIColors.backgroundColor,
+      appBar: AppBar(
+        foregroundColor: Colors.white,
+        centerTitle: true,
+        title: const Text(
+          "Create Category",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.black,
+      ),
+      body: CreateCategoryScreenBody(),
+    );
+  }
+}
+
+class CreateCategoryScreenBody extends StatelessWidget {
+  const CreateCategoryScreenBody({super.key});
 
   @override
   Widget build(BuildContext context) {

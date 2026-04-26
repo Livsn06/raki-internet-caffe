@@ -34,6 +34,14 @@ class Product {
     ProductFillable.imagePath: imagePath,
   };
 
+  Map<String, dynamic> newItemMap() => {
+    ProductFillable.name: name,
+    ProductFillable.catId: catId,
+    ProductFillable.variantLabel: variantLabel,
+    ProductFillable.price: price,
+    ProductFillable.imagePath: imagePath,
+  };
+
   Product.fromMap(Map<String, dynamic> map) {
     id = map[ProductFillable.id];
     name = map[ProductFillable.name];

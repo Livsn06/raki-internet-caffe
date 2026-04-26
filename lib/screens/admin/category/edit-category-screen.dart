@@ -3,21 +3,43 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:raki_internet_cafe/components/primary-button.dart';
+import 'package:raki_internet_cafe/core/ui-colors.dart';
 import 'package:raki_internet_cafe/models/category-model.dart';
 import 'package:raki_internet_cafe/providers/category-provider.dart';
 import 'package:raki_internet_cafe/providers/edit-category-provider.dart';
 import 'package:raki_internet_cafe/utils/gap.dart';
 
-class EditCategoryScreen extends StatefulWidget {
+class EditCategoryScreen extends StatelessWidget {
   const EditCategoryScreen({super.key, required this.category});
+  final Category category;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: UIColors.backgroundColor,
+      appBar: AppBar(
+        foregroundColor: Colors.white,
+        centerTitle: true,
+        title: const Text(
+          "Edit Category",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.black,
+      ),
+      body: EditCategoryScreenBody(category: category),
+    );
+  }
+}
+
+class EditCategoryScreenBody extends StatefulWidget {
+  const EditCategoryScreenBody({super.key, required this.category});
 
   final Category category;
 
   @override
-  State<EditCategoryScreen> createState() => _EditCategoryScreenState();
+  State<EditCategoryScreenBody> createState() => _EditCategoryScreenState();
 }
 
-class _EditCategoryScreenState extends State<EditCategoryScreen> {
+class _EditCategoryScreenState extends State<EditCategoryScreenBody> {
   @override
   void initState() {
     super.initState();

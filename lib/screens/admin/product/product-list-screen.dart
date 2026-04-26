@@ -3,18 +3,44 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
-import 'package:raki_internet_cafe/core/routing-controls.dart';
+import 'package:raki_internet_cafe/core/ui-colors.dart';
 import 'package:raki_internet_cafe/models/category-model.dart';
-import 'package:raki_internet_cafe/providers/category-provider.dart';
-import 'package:raki_internet_cafe/screens/layout/edit-product-category-layout-screen.dart';
+import 'package:raki_internet_cafe/models/product-model.dart';
+import 'package:raki_internet_cafe/providers/product-provider.dart';
+import 'package:raki_internet_cafe/screens/admin/product/create-product-screen.dart';
+import 'package:raki_internet_cafe/screens/admin/product/edit-product-screen.dart';
 
-class ProductScreen extends StatelessWidget {
-  const ProductScreen({super.key});
+class ProductListScreen extends StatelessWidget {
+  const ProductListScreen({super.key, required this.category});
+  final Category category;
 
   @override
   Widget build(BuildContext context) {
-    final categoryProvider = context.read<CategoryProvider>();
-    final categories = context.watch<CategoryProvider>().categories;
+    return Scaffold(
+      backgroundColor: UIColors.backgroundColor,
+      appBar: AppBar(
+        foregroundColor: Colors.white,
+        centerTitle: true,
+        title: Text(
+          category.name,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.black,
+      ),
+      body: ProductListScreenBody(category: category),
+    );
+  }
+}
+
+class ProductListScreenBody extends StatelessWidget {
+  const ProductListScreenBody({super.key, required this.category});
+  final Category category;
+  @override
+  Widget build(BuildContext context) {
+    final productProvider = context.read<ProductProvider>();
+    final products = context.watch<ProductProvider>().getProductsByCategory(
+      category.id,
+    );
     //
     return Container(
       padding: const EdgeInsets.all(12.0),
@@ -26,7 +52,7 @@ class ProductScreen extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Categories',
+                'Product Items',
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 22.0,
@@ -38,9 +64,12 @@ class ProductScreen extends StatelessWidget {
                 label: const Text('New', style: TextStyle(color: Colors.black)),
                 icon: const Icon(Icons.add, color: Colors.black),
                 onPressed: () {
-                  RouteControls.push(
+                  Navigator.push(
                     context,
-                    RouteScreens.createProductCategoryScreen,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CreateProductScreen(category: category),
+                    ),
                   );
                 },
               ),
@@ -53,13 +82,15 @@ class ProductScreen extends StatelessWidget {
             child: LiquidPullToRefresh(
               color: Colors.transparent,
               backgroundColor: Colors.black,
-              onRefresh: () async => categoryProvider.refresh(),
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return CategoryCard(category: categories[index]);
-                },
-                itemCount: categories.length,
-              ),
+              onRefresh: () async => productProvider.refresh(),
+              child: products.isEmpty
+                  ? const Center(child: Text('No products found'))
+                  : ListView.builder(
+                      itemBuilder: (context, index) {
+                        return ProductCard(product: products[index]);
+                      },
+                      itemCount: products.length,
+                    ),
             ),
           ),
         ],
@@ -68,16 +99,16 @@ class ProductScreen extends StatelessWidget {
   }
 }
 
-class CategoryCard extends StatelessWidget {
-  const CategoryCard({super.key, required this.category});
-  final Category category;
+class ProductCard extends StatelessWidget {
+  const ProductCard({super.key, required this.product});
+  final Product product;
   //
   @override
   Widget build(BuildContext context) {
-    final categoryProvider = context.read<CategoryProvider>();
+    final productProvider = context.read<ProductProvider>();
 
     return Dismissible(
-      key: ValueKey(category.id),
+      key: ValueKey(product.id),
       direction: DismissDirection.endToStart,
       background: Container(
         color: Colors.red,
@@ -89,8 +120,8 @@ class CategoryCard extends StatelessWidget {
         return showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text("Delete Category"),
-            content: Text("Are you sure you want to delete ${category.name}?"),
+            title: const Text("Delete Product"),
+            content: Text("Are you sure you want to delete ${product.name}?"),
             actions: [
               TextButton(
                 child: const Text("Cancel"),
@@ -105,18 +136,18 @@ class CategoryCard extends StatelessWidget {
         );
       },
       onDismissed: (direction) async {
-        final isSuccess = await categoryProvider.deleteCategory(category.id);
+        final isSuccess = await productProvider.deleteProduct(product.id);
 
         if (isSuccess) {
-          categoryProvider.refresh();
+          await productProvider.refresh();
           if (!context.mounted) return;
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: Text("${category.name} deleted!")));
+          ).showSnackBar(SnackBar(content: Text("${product.name} deleted!")));
         } else {
           if (!context.mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Failed to delete ${category.name}!")),
+            SnackBar(content: Text("Failed to delete ${product.name}!")),
           );
         }
       },
@@ -124,23 +155,26 @@ class CategoryCard extends StatelessWidget {
         child: ListTile(
           onTap: () {},
           leading: CircleAvatar(
-            backgroundImage: FileImage(File(category.imagePath)),
+            backgroundImage: FileImage(File(product.imagePath)),
           ),
           title: Text(
-            category.name,
+            product.name,
             style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
           ),
+          subtitle: Text(
+            "${product.variantLabel} - ₱${product.price.toStringAsFixed(2)}",
+            style: const TextStyle(color: Colors.grey),
+          ),
           trailing: IconButton(
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      EditProductCategoryLayoutScreen(category: category),
+                  builder: (context) => EditProductScreen(product: product),
                 ),
               );
             },

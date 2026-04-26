@@ -13,6 +13,39 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: UIColors.backgroundColor,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            context.read<AdminAuthProvider>().resetProvider();
+            RouteControls.pushAndRemoveUntil(
+              context,
+              RouteScreens.productScreen,
+            );
+          },
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
+        foregroundColor: Colors.white,
+        centerTitle: true,
+        title: const Text(
+          "Admin Panel",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+
+        backgroundColor: Colors.black,
+      ),
+
+      body: const AuthScreenBody(),
+    );
+  }
+}
+
+class AuthScreenBody extends StatelessWidget {
+  const AuthScreenBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     final authProvider = context.read<AdminAuthProvider>();
     final formKey = context.watch<AdminAuthProvider>().formKey;
     final password = context.watch<AdminAuthProvider>().password;

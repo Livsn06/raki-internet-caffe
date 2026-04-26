@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:raki_internet_cafe/core/ui-colors.dart';
 import 'package:raki_internet_cafe/models/category-model.dart';
@@ -40,8 +42,8 @@ class CategoryCard extends StatelessWidget {
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5.0),
-              child: Image.asset(
-                categories[index].imagePath,
+              child: Image.file(
+                File(categories[index].imagePath),
                 fit: BoxFit.cover,
               ),
             ),
