@@ -6,6 +6,13 @@ class CartProvider extends ChangeNotifier {
 
   List<CartItem> get cartItems => _cartItems;
 
+  double get totalPrice {
+    return _cartItems.fold(
+      0.0,
+      (total, item) => total + (item.price * item.quantity),
+    );
+  }
+
   void addToCart(CartItem item) {
     _cartItems.add(item);
     notifyListeners();

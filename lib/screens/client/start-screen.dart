@@ -4,7 +4,6 @@ import 'package:raki_internet_cafe/screens/layout/product-screen.dart';
 
 import '../../components/app-logo.dart';
 import '../../components/app-title.dart';
-import '../../core/routing-controls.dart';
 import '../../utils/gap.dart';
 
 class StartScreen extends StatelessWidget {

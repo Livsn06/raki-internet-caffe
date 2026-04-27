@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:raki_internet_cafe/models/admin-model.dart';
 import 'package:raki_internet_cafe/models/cart-item-model.dart';
 import 'package:raki_internet_cafe/models/category-model.dart';
+import 'package:raki_internet_cafe/models/order-model.dart';
 import 'package:raki_internet_cafe/models/product-model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -37,6 +38,7 @@ class DBHelper {
         await createCategoryTable(db);
         await createProductTable(db);
         await createAdminTable(db);
+        await createOrderTable(db);
       },
     );
     return _database!;
@@ -68,18 +70,18 @@ class DBHelper {
         ''');
   }
 
-  // Future<void> createCartItemTable(Database db) async {
-  //   await db.execute('''
-  //         CREATE TABLE ${CartItemFillable.table} (
-  //           ${CartItemFillable.id} INTEGER PRIMARY KEY AUTOINCREMENT,
-  //           ${CartItemFillable.productId} INTEGER NOT NULL,
-  //           ${CartItemFillable.productName} TEXT NOT NULL,
-  //           ${CartItemFillable.quantity} INTEGER NOT NULL,
-  //           ${CartItemFillable.price} REAL NOT NULL,
-  //           FOREIGN KEY (${CartItemFillable.productId}) REFERENCES ${ProductFillable.table}(${ProductFillable.id})
-  //         )
-  //       ''');
-  // }
+  Future<void> createOrderTable(Database db) async {
+    await db.execute('''
+          CREATE TABLE ${OrderFillable.table} (
+            ${OrderFillable.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+            ${OrderFillable.orderNumber} INTEGER NOT NULL,
+            ${OrderFillable.totalPrice} REAL NOT NULL,
+            ${OrderFillable.status} TEXT NOT NULL,
+            ${OrderFillable.items} TEXT NOT NULL,
+            ${OrderFillable.createdAt} TEXT NOT NULL
+          )
+        ''');
+  }
 
   Future<void> createAdminTable(Database db) async {
     await db.execute('''

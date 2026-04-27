@@ -8,6 +8,7 @@ import 'package:raki_internet_cafe/providers/create-category-provider.dart';
 import 'package:raki_internet_cafe/providers/create-product-provider.dart';
 import 'package:raki_internet_cafe/providers/edit-category-provider.dart';
 import 'package:raki_internet_cafe/providers/edit-product-provider.dart';
+import 'package:raki_internet_cafe/providers/order-provider.dart';
 import 'package:raki_internet_cafe/providers/product-provider.dart';
 import 'package:raki_internet_cafe/providers/splash-provider.dart';
 
@@ -33,5 +34,6 @@ class ProviderInitializer {
     ChangeNotifierProvider(create: (_) => CreateProductProvider()),
     ChangeNotifierProvider(create: (_) => EditProductProvider()),
     ChangeNotifierProvider(create: (_) => CartProvider()),
+    ChangeNotifierProvider(create: (_) => OrderProvider()),
   ];
 }
