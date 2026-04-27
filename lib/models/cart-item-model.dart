@@ -5,6 +5,7 @@ class CartItemFillable {
   static String productId = "product_id";
   static String variantLabel = "variant_label";
   static String productName = "product_name";
+  static String productImagePath = "product_image_path";
   static String quantity = "quantity";
   static String price = "price";
 }
@@ -27,4 +28,28 @@ class CartItem {
     required this.quantity,
     required this.price,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      CartItemFillable.id: id,
+      CartItemFillable.productId: productId,
+      CartItemFillable.productName: productName,
+      CartItemFillable.variantLabel: variantLabel,
+      CartItemFillable.productImagePath: productImagePath,
+      CartItemFillable.quantity: quantity,
+      CartItemFillable.price: price,
+    };
+  }
+
+  factory CartItem.fromMap(Map<String, dynamic> map) {
+    return CartItem(
+      id: map[CartItemFillable.id],
+      productId: map[CartItemFillable.productId],
+      productName: map[CartItemFillable.productName],
+      variantLabel: map[CartItemFillable.variantLabel],
+      quantity: map[CartItemFillable.quantity],
+      price: map[CartItemFillable.price],
+      productImagePath: map[CartItemFillable.productImagePath],
+    );
+  }
 }

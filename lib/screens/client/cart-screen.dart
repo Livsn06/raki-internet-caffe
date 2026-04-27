@@ -6,13 +6,20 @@ import 'package:provider/provider.dart';
 import 'package:raki_internet_cafe/core/ui-colors.dart';
 import 'package:raki_internet_cafe/models/cart-item-model.dart';
 import 'package:raki_internet_cafe/providers/cart-provider.dart';
-import 'package:raki_internet_cafe/providers/product-provider.dart';
+import 'package:raki_internet_cafe/providers/order-provider.dart';
+import 'package:raki_internet_cafe/screens/client/checkout-order-screen.dart';
+import 'package:raki_internet_cafe/utils/gap.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cartItems = context.watch<CartProvider>().cartItems;
+    final totalPrice = context.watch<CartProvider>().totalPrice;
+    final hasNoItems = cartItems.isEmpty;
+    final orderProvider = context.watch<OrderProvider>();
+
     return Scaffold(
       backgroundColor: UIColors.backgroundColor,
       appBar: AppBar(
@@ -25,6 +32,55 @@ class CartScreen extends StatelessWidget {
         backgroundColor: Colors.black,
       ),
       body: CartScreenBody(),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(14.0),
+        width: double.infinity,
+        color: Colors.black,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              "Total: ₱${context.watch<CartProvider>().totalPrice.toStringAsFixed(2)}",
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 22.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            vGap(12),
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: hasNoItems
+                    ? Colors.grey
+                    : UIColors.tertiaryColor,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              onPressed: () {
+                if (hasNoItems) return;
+                orderProvider.createOrder(cartItems, totalPrice);
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const CheckoutOrderScreen(),
+                  ),
+                );
+              },
+              label: Text(
+                "Finalize & Checkout",
+                style: TextStyle(color: Colors.white),
+              ),
+              icon: const Icon(
+                Icons.shopping_cart_checkout_outlined,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -33,7 +89,6 @@ class CartScreenBody extends StatelessWidget {
   const CartScreenBody({super.key});
   @override
   Widget build(BuildContext context) {
-    final cartProvider = context.read<CartProvider>();
     final cartItems = context.watch<CartProvider>().cartItems;
 
     return Container(
@@ -50,6 +105,15 @@ class CartScreenBody extends StatelessWidget {
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 22.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              hGap(4),
+              Text(
+                '(${cartItems.length})',
+                style: const TextStyle(
+                  color: UIColors.tertiaryColor,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -121,7 +185,6 @@ class CartItemCard extends StatelessWidget {
       },
       child: Card(
         child: ListTile(
-          onTap: () {},
           leading: CircleAvatar(
             backgroundImage: FileImage(File(item.productImagePath)),
           ),
@@ -140,13 +203,14 @@ class CartItemCard extends StatelessWidget {
           trailing: CounterButton(
             loading: false,
             onChange: (int val) {
+              if (val < 1) return;
               item.quantity = val;
               context.read<CartProvider>().updateCartItem(item, val);
             },
             count: item.quantity,
-            countColor: Colors.purple,
-            buttonColor: Colors.purpleAccent,
-            progressColor: Colors.purpleAccent,
+            countColor: Colors.black,
+            buttonColor: UIColors.tertiaryColor,
+            progressColor: UIColors.primaryColor,
           ),
         ),
       ),
