@@ -36,4 +36,13 @@ class AdminRepository {
     await db.insert(AdminFillable.table, {AdminFillable.password: password});
     log('Admin seeded.');
   }
+
+  Future<Admin?> getAdmin() async {
+    final db = await DBHelper.instance.database;
+    final result = await db.query(AdminFillable.table);
+    if (result.isNotEmpty) {
+      return Admin.fromMap(result.first);
+    }
+    return null;
+  }
 }
