@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:raki_internet_cafe/components/card-tile-button.dart';
 import 'package:raki_internet_cafe/screens/admin/category/category-screen.dart';
+import 'package:raki_internet_cafe/screens/admin/order/order-screen.dart';
 import 'package:raki_internet_cafe/screens/admin/profile/profile-screen.dart';
 
 class AdminPanelScreen extends StatelessWidget {
@@ -39,7 +40,12 @@ class AdminPanelScreen extends StatelessWidget {
           icon: Icons.list,
           foregroundColor: Colors.white,
           backgroundColor: Colors.blue,
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const OrderScreen()),
+            );
+          },
         ),
       ],
     );

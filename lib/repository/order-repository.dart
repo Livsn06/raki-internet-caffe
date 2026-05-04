@@ -27,6 +27,16 @@ class OrderRepository {
     return result > 0;
   }
 
+  Future<bool> updateStatus(int orderId, String newStatus) async {
+    final result = await database.update(
+      OrderFillable.table,
+      {OrderFillable.status: newStatus},
+      where: '${OrderFillable.id} = ?',
+      whereArgs: [orderId],
+    );
+    return result > 0;
+  }
+
   Future<List<Order>> getAll() async {
     final List<Map<String, dynamic>> maps = await database.query(
       OrderFillable.table,
