@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:raki_internet_cafe/helper/db-helper.dart';
 import 'package:raki_internet_cafe/providers/initialize-provider.dart';
 import 'package:raki_internet_cafe/screens/layout/start-layout-screen.dart';
-import 'package:raki_internet_cafe/seeders/database-seeder.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
