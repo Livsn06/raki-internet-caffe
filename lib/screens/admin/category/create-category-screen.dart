@@ -16,6 +16,13 @@ class CreateCategoryScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: UIColors.backgroundColor,
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            context.read<CreateCategoryProvider>().resetProvider();
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
         foregroundColor: Colors.white,
         centerTitle: true,
         title: const Text(
@@ -51,6 +58,7 @@ class CreateCategoryScreenBody extends StatelessWidget {
           const SnackBar(content: Text("Category created successfully!")),
         );
       } else {
+        createCategoryProvider.setLoading(false);
         if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
