@@ -12,45 +12,53 @@ class ProductCategorySection extends StatelessWidget {
     final pageProvider = context.watch<ProductPageViewProvider>();
     final categoryProvider = context.watch<CategoryProvider>();
     final categories = context.watch<CategoryProvider>().categories;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
-    return Flexible(
-      flex: 2,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(right: BorderSide(color: Colors.grey)),
+    // Determine responsive grid properties based on screen size
+    int crossAxisCount = 1;
+    double childAspectRatio = 0.9;
+
+    if (screenWidth > 1200) {
+      crossAxisCount = 2;
+      childAspectRatio = 0.75;
+    } else if (screenWidth > 900) {
+      crossAxisCount = 1;
+      childAspectRatio = 0.85;
+    }
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(right: BorderSide(color: Colors.grey)),
+      ),
+      child: GridView.builder(
+        padding: const EdgeInsets.all(8.0),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
+          childAspectRatio: childAspectRatio,
+          mainAxisSpacing: 8.0,
+          crossAxisSpacing: 8.0,
         ),
-        height: double.infinity,
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1, // Full width cards
-            childAspectRatio: 0.9, // Nearly square
-          ),
-          itemCount: categories.length,
-          itemBuilder: (context, index) => Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                // We use the constraints to determine if we are in a wide layout
-                return InkWell(
-                  onTap: () {
-                    categoryProvider.setSelectedCategory(categories[index].id);
-                    pageProvider.jumpToPage(index);
-                  },
-                  child: CategoryCard(
-                    categories: categories,
-                    index: index,
-                    pageProvider: pageProvider,
-                    // Pass a sizing factor if your CategoryCard supports it
-                    cardWidth: constraints.maxWidth,
-                    cardHeight: constraints.maxHeight,
-                  ),
-                );
+        itemCount: categories.length,
+        itemBuilder: (context, index) => LayoutBuilder(
+          builder: (context, constraints) {
+            return InkWell(
+              onTap: () {
+                categoryProvider.setSelectedCategory(categories[index].id);
+                pageProvider.jumpToPage(index);
               },
-            ),
-          ),
+              child: CategoryCard(
+                categories: categories,
+                index: index,
+                pageProvider: pageProvider,
+                cardWidth: constraints.maxWidth,
+                cardHeight: constraints.maxHeight,
+              ),
+            );
+          },
         ),
       ),
     );

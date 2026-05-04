@@ -35,7 +35,10 @@ class ProductScreen extends StatelessWidget {
         children: [
           Flexible(
             child: Row(
-              children: [ProductCategorySection(), ProductContentSection()],
+              children: [
+                Expanded(flex: 2, child: ProductCategorySection()),
+                Expanded(flex: 5, child: ProductContentSection()),
+              ],
             ),
           ),
           const CartSection(),

@@ -13,15 +13,12 @@ class ProductContentSection extends StatelessWidget {
         .watch<ProductPageViewProvider>();
     final categories = context.watch<CategoryProvider>().categories;
 
-    return Flexible(
-      flex: 5,
-      child: PageView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        itemBuilder: (context, index) => ProductSection(),
-        itemCount: categories.length,
-        controller: pageProvider.pageController,
-      ),
+    return PageView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      itemBuilder: (context, index) => ProductSection(),
+      itemCount: categories.length,
+      controller: pageProvider.pageController,
     );
   }
 }
