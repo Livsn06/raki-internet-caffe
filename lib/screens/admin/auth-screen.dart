@@ -14,6 +14,7 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const _green = Color(0xFF2E7D32);
     return Scaffold(
       backgroundColor: UIColors.backgroundColor,
       appBar: AppBar(
@@ -30,8 +31,7 @@ class AuthScreen extends StatelessWidget {
           "Admin Panel",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-
-        backgroundColor: Colors.black,
+        backgroundColor: _green,
       ),
 
       body: const AuthScreenBody(),
@@ -72,47 +72,84 @@ class AuthScreenBody extends StatelessWidget {
       }
     }
 
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      alignment: Alignment.center,
-      color: UIColors.primaryColor,
-      padding: const EdgeInsets.all(12.0),
+    return Center(
       child: SingleChildScrollView(
-        child: Form(
-          key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AppLogo(scale: 2.5),
-              vGap(16),
-              Text(
-                "Authorize Admin",
-                style: Theme.of(context).textTheme.headlineMedium,
+        padding: const EdgeInsets.all(12.0),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 520),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            elevation: 6,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 24.0,
+                horizontal: 20.0,
               ),
-              Text(
-                "Only authorized admin can access the admin panel",
-                style: Theme.of(context).textTheme.bodyMedium,
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircleAvatar(
+                      radius: 36,
+                      backgroundColor: const Color(0xFF2E7D32),
+                      child: AppLogo(scale: 1.5),
+                    ),
+                    vGap(16),
+                    Text(
+                      "Authorize Admin",
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      "Only authorized admin can access the admin panel",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    vGap(16),
+                    PasswordFormField(
+                      label: "Password",
+                      controller: password,
+                      isLoading: isLoading,
+                      isShowPassword: isShowPassword,
+                      toggleShowPassword: authProvider.toggleShowPassword,
+                      validator: authProvider.passwordValidator,
+                    ),
+                    vGap(20),
+                    PrimaryButton(
+                      label: "Authorize & Access Admin Panel",
+                      loadingLabel: "Authorizing...",
+                      onTap: () async {
+                        await authorize();
+                      },
+                      isLoading: isLoading,
+                      backgroundColor: const Color(0xFF2E7D32),
+                      foregroundColor: Colors.white,
+                    ),
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed: () {
+                        authProvider.resetProvider();
+                        RouteControls.pushAndRemoveUntil(
+                          context,
+                          ProductScreen(),
+                        );
+                      },
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          color: Color(0xFFF57C00),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              vGap(16),
-              PasswordFormField(
-                label: "Password",
-                controller: password,
-                isLoading: isLoading,
-                isShowPassword: isShowPassword,
-                toggleShowPassword: authProvider.toggleShowPassword,
-                validator: authProvider.passwordValidator,
-              ),
-              vGap(24),
-              PrimaryButton(
-                label: "Authorize & Access Admin Panel",
-                loadingLabel: "Authorizing...",
-                onTap: () async {
-                  await authorize();
-                },
-                isLoading: isLoading,
-              ),
-            ],
+            ),
           ),
         ),
       ),

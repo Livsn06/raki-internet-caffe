@@ -11,12 +11,13 @@ class OrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const _green = Color(0xFF2E7D32);
     return Scaffold(
       backgroundColor: UIColors.backgroundColor,
       appBar: AppBar(
         foregroundColor: Colors.white,
         elevation: 0,
-        backgroundColor: Colors.black,
+        backgroundColor: _green,
         title: const Text(
           'Orders Management',
           style: TextStyle(
@@ -26,7 +27,7 @@ class OrderScreen extends StatelessWidget {
           ),
         ),
         centerTitle: false,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomRight: Radius.circular(16),
             bottomLeft: Radius.circular(16),
@@ -75,11 +76,22 @@ class _OrderScreenBodyState extends State<OrderScreenBody> {
     final allOrders = context.watch<OrderProvider>().orders;
     final filteredOrders = _filterOrders(allOrders);
 
+    const _green = Color(0xFF2E7D32);
+    const _orange = Color(0xFFF57C00);
+
     return Column(
       children: [
         // Filter Chips Section
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 6),
+            ],
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+          margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -90,6 +102,10 @@ class _OrderScreenBodyState extends State<OrderScreenBody> {
                     : allOrders
                           .where((o) => o.status.toUpperCase() == filter)
                           .length;
+
+                final Color selectedColor = filter == 'PENDING'
+                    ? _orange
+                    : (filter == 'COMPLETED' ? _green : Colors.red[400]!);
 
                 return Padding(
                   padding: const EdgeInsets.only(right: 8.0),
@@ -103,15 +119,13 @@ class _OrderScreenBodyState extends State<OrderScreenBody> {
                       ),
                     ),
                     backgroundColor: Colors.white,
-                    selectedColor: _getFilterColor(filter),
+                    selectedColor: selectedColor,
                     selected: isSelected,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                       side: BorderSide(
-                        color: isSelected
-                            ? _getFilterColor(filter)
-                            : Colors.grey[300]!,
-                        width: 2,
+                        color: isSelected ? selectedColor : Colors.grey[200]!,
+                        width: 1.5,
                       ),
                     ),
                     onSelected: (bool selected) {
@@ -183,7 +197,7 @@ class _OrderScreenBodyState extends State<OrderScreenBody> {
   Color _getFilterColor(String filter) {
     switch (filter) {
       case 'PENDING':
-        return UIColors.tertiaryColor;
+        return const Color(0xFFF57C00);
       case 'COMPLETED':
         return UIColors.secondaryColor;
       case 'CANCELLED':
@@ -200,6 +214,8 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const _green = Color(0xFF2E7D32);
+    const _orange = Color(0xFFF57C00);
     final orderProvider = context.read<OrderProvider>();
 
     return Padding(
@@ -227,6 +243,26 @@ class OrderCard extends StatelessWidget {
           ),
           child: Stack(
             children: [
+              // colored left accent
+              Positioned(
+                left: 0,
+                top: 0,
+                bottom: 0,
+                child: Container(
+                  width: 6,
+                  decoration: BoxDecoration(
+                    color: order.status.toLowerCase() == 'completed'
+                        ? UIColors.secondaryColor
+                        : order.status.toLowerCase() == 'pending'
+                        ? _orange
+                        : Colors.red[400],
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      bottomLeft: Radius.circular(16),
+                    ),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -344,13 +380,13 @@ class OrderCard extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: Colors.blue[50],
+                              color: _orange.withOpacity(0.08),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Icon(
                               Icons.arrow_forward_ios,
                               size: 16,
-                              color: Colors.blue[400],
+                              color: _orange,
                             ),
                           ),
                         ),

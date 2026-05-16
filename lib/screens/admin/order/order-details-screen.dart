@@ -81,7 +81,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       backgroundColor: UIColors.backgroundColor,
       appBar: AppBar(
         foregroundColor: Colors.white,
-        backgroundColor: Colors.black,
+        backgroundColor: const Color(0xFF2E7D32),
         elevation: 2,
         centerTitle: true,
         title: Text(
@@ -101,12 +101,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: UIColors.primaryColor,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(12.0),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 4,
+                    color: Colors.black.withOpacity(0.06),
+                    blurRadius: 6,
                     offset: const Offset(0, 2),
                   ),
                 ],
@@ -158,12 +158,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             const SizedBox(height: 12),
             Container(
               decoration: BoxDecoration(
-                color: UIColors.primaryColor,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(12.0),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 4,
+                    color: Colors.black.withOpacity(0.06),
+                    blurRadius: 6,
                     offset: const Offset(0, 2),
                   ),
                 ],
@@ -240,7 +240,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     child: ElevatedButton(
                       onPressed: _cancelOrder,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: UIColors.tertiaryColor,
+                        backgroundColor: const Color(0xFFF57C00),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
@@ -269,7 +269,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     child: ElevatedButton(
                       onPressed: _completeOrder,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: UIColors.secondaryColor,
+                        backgroundColor: const Color(0xFF2E7D32),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
