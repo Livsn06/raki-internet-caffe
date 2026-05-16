@@ -66,10 +66,16 @@ class EditProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> editProduct(int categoryId) async {
+  Future<bool> editProduct() async {
     setLoading(true);
-    if (!formKey.currentState!.validate()) return false;
-    if (imageFile == null) return false;
+    if (!formKey.currentState!.validate()) {
+      setLoading(false);
+      return false;
+    }
+    if (imageFile == null) {
+      setLoading(false);
+      return false;
+    }
 
     final database = await DBHelper.instance.database;
     final repo = ProductRepository(database: database);
@@ -87,7 +93,7 @@ class EditProductProvider extends ChangeNotifier {
       id: _product!.id,
       name: name.text,
       imagePath: path.isNotEmpty ? path : _product!.imagePath,
-      catId: categoryId,
+      catId: _product!.catId,
       variantLabel: variantLabel.text,
       price: double.tryParse(price.text) ?? 0,
     );
