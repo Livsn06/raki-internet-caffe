@@ -13,6 +13,7 @@ class CreateCategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const _green = Color(0xFF2E7D32);
     return Scaffold(
       backgroundColor: UIColors.backgroundColor,
       appBar: AppBar(
@@ -29,7 +30,7 @@ class CreateCategoryScreen extends StatelessWidget {
           "Create Category",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: _green,
       ),
       body: CreateCategoryScreenBody(),
     );
@@ -41,6 +42,7 @@ class CreateCategoryScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const _green = Color(0xFF2E7D32);
     final categoryProvider = context.read<CategoryProvider>();
     final createCategoryProvider = context.watch<CreateCategoryProvider>();
     final image = context.watch<CreateCategoryProvider>().imageFile;
@@ -74,46 +76,60 @@ class CreateCategoryScreenBody extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.all(12.0),
-      width: double.infinity,
-      height: double.infinity,
-      child: SingleChildScrollView(
-        child: Form(
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                InkWell(
-                  onTap: () =>
-                      isLoading ? null : createCategoryProvider.pickImage(),
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.black,
-                    backgroundImage: image != null
-                        ? FileImage(File(image.path))
-                        : null,
-                    child: image == null
-                        ? const Icon(Icons.camera_alt, color: Colors.white)
-                        : null,
-                  ),
-                ),
-                vGap(16),
-                TextFormField(
-                  controller: categoryName,
-                  decoration: const InputDecoration(
-                    label: Text("Category Name"),
-                  ),
-                  validator: (value) =>
-                      createCategoryProvider.validateName(value),
-                ),
-
-                vGap(16),
-                PrimaryButton(
-                  label: "Create",
-                  isLoading: isLoading,
-                  onTap: create,
+      padding: const EdgeInsets.all(16.0),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 640),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.04),
+                  blurRadius: 16,
                 ),
               ],
+            ),
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  InkWell(
+                    onTap: () =>
+                        isLoading ? null : createCategoryProvider.pickImage(),
+                    child: CircleAvatar(
+                      radius: 48,
+                      backgroundColor: Colors.green.withOpacity(0.12),
+                      backgroundImage: image != null
+                          ? FileImage(File(image.path))
+                          : null,
+                      child: image == null
+                          ? Icon(Icons.camera_alt, color: Colors.green)
+                          : null,
+                    ),
+                  ),
+                  vGap(16),
+                  TextFormField(
+                    controller: categoryName,
+                    decoration: const InputDecoration(
+                      label: Text("Category Name"),
+                    ),
+                    validator: (value) =>
+                        createCategoryProvider.validateName(value),
+                  ),
+                  vGap(18),
+                  PrimaryButton(
+                    label: "Create",
+                    isLoading: isLoading,
+                    onTap: create,
+                    backgroundColor: _green,
+                    foregroundColor: Colors.white,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

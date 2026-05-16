@@ -10,6 +10,7 @@ class ProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const _green = Color(0xFF2E7D32);
     return Scaffold(
       backgroundColor: UIColors.backgroundColor,
       appBar: AppBar(
@@ -19,7 +20,7 @@ class ProductScreen extends StatelessWidget {
           "Menu",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: _green,
         actions: [
           IconButton(
             onPressed: () {

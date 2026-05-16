@@ -12,6 +12,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const _green = Color(0xFF2E7D32);
     return Scaffold(
       backgroundColor: UIColors.backgroundColor,
       appBar: AppBar(
@@ -21,7 +22,7 @@ class ProfileScreen extends StatelessWidget {
           "Profile",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: _green,
       ),
       body: ProfileScreenBody(),
     );
@@ -66,56 +67,101 @@ class ProfileScreenBody extends StatelessWidget {
       }
     }
 
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      alignment: Alignment.center,
-      width: double.infinity,
-      height: double.infinity,
-      child: SingleChildScrollView(
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              Icon(Icons.person, size: 100),
-              const Text(
-                "Change password",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+    const _green = Color(0xFF2E7D32);
+    const _orange = Color(0xFFF57C00);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth >= 760;
+        final maxWidth = isWide ? 700.0 : constraints.maxWidth - 32.0;
+
+        return Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxWidth),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 24.0,
+                  horizontal: 20.0,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 18,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      CircleAvatar(
+                        radius: isWide ? 48 : 40,
+                        backgroundColor: _green.withOpacity(0.12),
+                        child: Icon(
+                          Icons.person,
+                          size: isWide ? 48 : 40,
+                          color: _green,
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      const Text(
+                        "Change password",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Warning: Changing your password will force you to log you out',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey.shade600),
+                      ),
+                      vGap(18),
+                      PasswordFormField(
+                        label: "New Password",
+                        controller: password,
+                        isShowPassword: isShowPassword,
+                        isLoading: isLoading,
+                        toggleShowPassword: authProvider.toggleShowPassword,
+                        validator: authProvider.passwordValidator,
+                      ),
+                      vGap(12),
+                      PasswordFormField(
+                        label: "Confirm Password",
+                        controller: confirmPassword,
+                        isShowPassword: isShowPassword,
+                        isLoading: isLoading,
+                        toggleShowPassword: authProvider.toggleShowPassword,
+                        validator: authProvider.confirmPasswordValidator,
+                      ),
+                      vGap(20),
+                      PrimaryButton(
+                        label: "Update Password",
+                        loadingLabel: "Updating...",
+                        onTap: () async {
+                          await update();
+                        },
+                        isLoading: isLoading,
+                        backgroundColor: _orange,
+                        foregroundColor: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              Text(
-                'Warning: Changing your password will force you to log you out',
-                style: TextStyle(color: Colors.grey.shade600),
-              ),
-              vGap(16),
-              PasswordFormField(
-                label: "New Password",
-                controller: password,
-                isShowPassword: isShowPassword,
-                isLoading: isLoading,
-                toggleShowPassword: authProvider.toggleShowPassword,
-                validator: authProvider.passwordValidator,
-              ),
-              vGap(12),
-              PasswordFormField(
-                label: "Confirm Password",
-                controller: confirmPassword,
-                isShowPassword: isShowPassword,
-                isLoading: isLoading,
-                toggleShowPassword: authProvider.toggleShowPassword,
-                validator: authProvider.confirmPasswordValidator,
-              ),
-              vGap(16),
-              PrimaryButton(
-                label: "Update Password",
-                loadingLabel: "Loading...",
-                onTap: () async {
-                  await update();
-                },
-                isLoading: isLoading,
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

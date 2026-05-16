@@ -45,7 +45,7 @@ class AdminPanelLayout extends StatelessWidget {
         foregroundColor: Colors.white,
         title: const Text("Admin Panel"),
         centerTitle: true,
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xFF2E7D32),
         actions: [
           IconButton(onPressed: logout, icon: const Icon(Icons.logout)),
         ],

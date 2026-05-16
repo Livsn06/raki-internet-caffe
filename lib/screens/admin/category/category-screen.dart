@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
+import 'package:raki_internet_cafe/core/ui-colors.dart';
 import 'package:raki_internet_cafe/models/category-model.dart';
 import 'package:raki_internet_cafe/providers/category-provider.dart';
+import 'package:raki_internet_cafe/providers/product-provider.dart';
 import 'package:raki_internet_cafe/screens/admin/category/create-category-screen.dart';
 import 'package:raki_internet_cafe/screens/admin/category/edit-category-screen.dart';
-import 'package:raki_internet_cafe/core/ui-colors.dart';
 import 'package:raki_internet_cafe/screens/admin/product/product-list-screen.dart';
 
 class CategoryScreen extends StatelessWidget {
@@ -15,6 +15,7 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const _green = Color(0xFF2E7D32);
     return Scaffold(
       backgroundColor: UIColors.backgroundColor,
       appBar: AppBar(
@@ -24,7 +25,7 @@ class CategoryScreen extends StatelessWidget {
           "Categories",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: _green,
       ),
       body: CategoryScreenBody(),
     );
@@ -38,64 +39,83 @@ class CategoryScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final categoryProvider = context.read<CategoryProvider>();
     final categories = context.watch<CategoryProvider>().categories;
-    //
-    return Container(
-      padding: const EdgeInsets.all(12.0),
-      width: double.infinity,
-      height: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              Text(
-                'All Categories',
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Spacer(),
-              TextButton.icon(
-                label: const Text('New', style: TextStyle(color: Colors.black)),
-                icon: const Icon(Icons.add, color: Colors.black),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CreateCategoryScreen(),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
 
-          Divider(color: Colors.grey),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth >= 760;
+        final maxWidth = isWide ? 900.0 : double.infinity;
 
-          Expanded(
-            child: LiquidPullToRefresh(
-              color: Colors.transparent,
-              backgroundColor: Colors.black,
-              onRefresh: () async => categoryProvider.refresh(),
-              child: categories.isEmpty
-                  ? const Center(
-                      child: Text(
-                        "No categories found. Pull down to refresh.",
-                        style: TextStyle(color: Colors.grey),
+        return Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: maxWidth),
+            child: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        'All Categories',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    )
-                  : ListView.builder(
-                      itemBuilder: (context, index) {
-                        return CategoryCard(category: categories[index]);
-                      },
-                      itemCount: categories.length,
-                    ),
+                      const Spacer(),
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF2E7D32),
+                          foregroundColor: Colors.white,
+                        ),
+                        icon: const Icon(Icons.add),
+                        label: const Text('New'),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreateCategoryScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  Expanded(
+                    child: categories.isEmpty
+                        ? const Center(
+                            child: Text(
+                              "No categories found. Pull down to refresh.",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          )
+                        : RefreshIndicator(
+                            onRefresh: () async => categoryProvider.refresh(),
+                            child: ListView.builder(
+                              itemCount: categories.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0,
+                                  ),
+                                  child: CategoryCard(
+                                    category: categories[index],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -103,10 +123,19 @@ class CategoryScreenBody extends StatelessWidget {
 class CategoryCard extends StatelessWidget {
   const CategoryCard({super.key, required this.category});
   final Category category;
-  //
+
   @override
   Widget build(BuildContext context) {
     final categoryProvider = context.read<CategoryProvider>();
+    final productProvider = context.watch<ProductProvider>();
+
+    final palette = [
+      Color(0xFF2E7D32),
+      Color(0xFFF57C00),
+      Colors.teal,
+      Colors.indigo,
+    ];
+    final color = palette[category.id % palette.length];
 
     return Dismissible(
       key: ValueKey(category.id),
@@ -153,7 +182,9 @@ class CategoryCard extends StatelessWidget {
         }
       },
       child: Card(
-        child: ListTile(
+        elevation: 1,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: InkWell(
           onTap: () {
             Navigator.push(
               context,
@@ -162,27 +193,77 @@ class CategoryCard extends StatelessWidget {
               ),
             );
           },
-          leading: CircleAvatar(
-            backgroundImage: FileImage(File(category.imagePath)),
-          ),
-          title: Text(
-            category.name,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 12.0,
+              horizontal: 12.0,
             ),
-          ),
-          trailing: IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditCategoryScreen(category: category),
+            child: Row(
+              children: [
+                Container(
+                  width: 6,
+                  height: 64,
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ),
-              );
-            },
-            icon: Icon(Icons.edit, color: Colors.black),
+                const SizedBox(width: 10),
+                CircleAvatar(
+                  radius: 28,
+                  backgroundColor: Colors.white,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(28),
+                    child: category.imagePath.isNotEmpty
+                        ? Image.file(
+                            File(category.imagePath),
+                            fit: BoxFit.cover,
+                            width: 56,
+                            height: 56,
+                          )
+                        : Icon(Icons.category, color: Colors.grey.shade700),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        category.name,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        '${productProvider.getProductsByCategory(category.id).length} products',
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            EditCategoryScreen(category: category),
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.edit, color: Colors.grey.shade700),
+                ),
+              ],
+            ),
           ),
         ),
       ),
