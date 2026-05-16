@@ -7,19 +7,23 @@ class PrimaryButton extends StatelessWidget {
     this.onTap,
     this.isLoading = false,
     this.loadingLabel = "Loading",
+    this.backgroundColor,
+    this.foregroundColor,
   });
   final Function()? onTap;
   final bool isLoading;
   final String label;
   final String loadingLabel;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
+        backgroundColor: backgroundColor ?? Colors.black,
+        foregroundColor: foregroundColor ?? Colors.white,
       ),
       onPressed: isLoading ? null : onTap,
       child: Text(isLoading ? loadingLabel : label),
