@@ -29,13 +29,13 @@ class CartScreen extends StatelessWidget {
           'My Cart',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: const Color(0xFF2E7D32),
       ),
       body: CartScreenBody(),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(14.0),
         width: double.infinity,
-        color: Colors.black,
+        color: Colors.white,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,7 +43,7 @@ class CartScreen extends StatelessWidget {
             Text(
               "Total: ₱${context.watch<CartProvider>().totalPrice.toStringAsFixed(2)}",
               style: const TextStyle(
-                color: Colors.white,
+                color: Color(0xFF2E7D32),
                 fontSize: 22.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -53,11 +53,12 @@ class CartScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: hasNoItems
                     ? Colors.grey
-                    : UIColors.tertiaryColor,
+                    : const Color(0xFFF57C00),
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
               ),
               onPressed: () {
                 if (hasNoItems) return;
@@ -92,7 +93,8 @@ class CartScreenBody extends StatelessWidget {
     final cartItems = context.watch<CartProvider>().cartItems;
 
     return Container(
-      padding: const EdgeInsets.all(12.0),
+      color: UIColors.backgroundColor,
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
       width: double.infinity,
       height: double.infinity,
       child: Column(
@@ -100,31 +102,58 @@ class CartScreenBody extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
-                'Added Items',
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold,
+              const Expanded(
+                child: Text(
+                  'Added Items',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              hGap(4),
-              Text(
-                '(${cartItems.length})',
-                style: const TextStyle(
-                  color: UIColors.tertiaryColor,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF57C00).withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  '(${cartItems.length})',
+                  style: const TextStyle(
+                    color: Color(0xFFF57C00),
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
           ),
 
-          Divider(color: Colors.grey),
+          const SizedBox(height: 12),
 
           Expanded(
             child: cartItems.isEmpty
-                ? const Center(child: Text('Your cart is empty'))
+                ? Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(
+                          Icons.shopping_cart_outlined,
+                          size: 72,
+                          color: Colors.grey,
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          'Your cart is empty',
+                          style: TextStyle(color: Colors.grey, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  )
                 : ListView.builder(
                     itemBuilder: (context, index) {
                       return CartItemCard(item: cartItems[index]);
@@ -150,7 +179,10 @@ class CartItemCard extends StatelessWidget {
       key: ValueKey(item.productId),
       direction: DismissDirection.endToStart,
       background: Container(
-        color: Colors.red,
+        decoration: BoxDecoration(
+          color: const Color(0xFFF57C00),
+          borderRadius: BorderRadius.circular(16),
+        ),
         padding: const EdgeInsets.only(right: 20.0),
         alignment: Alignment.centerRight,
         child: const Icon(Icons.delete, color: Colors.white),
@@ -184,33 +216,77 @@ class CartItemCard extends StatelessWidget {
         );
       },
       child: Card(
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundImage: FileImage(File(item.productImagePath)),
-          ),
-          title: Text(
-            item.productName,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-          ),
-          subtitle: Text(
-            "${item.variantLabel} - ₱${item.price.toStringAsFixed(2)}",
-            style: const TextStyle(color: Colors.grey),
-          ),
-          trailing: CounterButton(
-            loading: false,
-            onChange: (int val) {
-              if (val < 1) return;
-              item.quantity = val;
-              context.read<CartProvider>().updateCartItem(item, val);
-            },
-            count: item.quantity,
-            countColor: Colors.black,
-            buttonColor: UIColors.tertiaryColor,
-            progressColor: UIColors.primaryColor,
+        elevation: 2,
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.grey.shade100,
+                backgroundImage: File(item.productImagePath).path.isNotEmpty
+                    ? FileImage(File(item.productImagePath))
+                    : null,
+                child: item.productImagePath.isEmpty
+                    ? const Icon(Icons.image_not_supported, color: Colors.grey)
+                    : null,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.productName,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      item.variantLabel,
+                      style: const TextStyle(
+                        color: Color(0xFFF57C00),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "₱${item.price.toStringAsFixed(2)}",
+                      style: const TextStyle(
+                        color: Color(0xFF2E7D32),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                children: [
+                  CounterButton(
+                    loading: false,
+                    onChange: (int val) {
+                      if (val < 1) return;
+                      item.quantity = val;
+                      context.read<CartProvider>().updateCartItem(item, val);
+                    },
+                    count: item.quantity,
+                    countColor: Colors.black,
+                    buttonColor: const Color(0xFF2E7D32),
+                    progressColor: const Color(0xFFF57C00),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Total: ₱${(item.price * item.quantity).toStringAsFixed(2)}',
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
