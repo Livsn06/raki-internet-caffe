@@ -57,14 +57,15 @@ class _EditProductScreenBodyState extends State<EditProductScreenBody> {
     final isLoading = context.watch<EditProductProvider>().isLoading;
 
     void edit() async {
-      final success = await editProductProvider.editProduct(widget.product.id);
+      final success = await editProductProvider.editProduct();
 
       if (success) {
         await productProvider.refresh();
         if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Product created successfully!")),
+          const SnackBar(content: Text("Product updated successfully!")),
         );
+        Navigator.of(context).pop();
       } else {
         if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -72,7 +73,7 @@ class _EditProductScreenBodyState extends State<EditProductScreenBody> {
             content: Text(
               image == null
                   ? "Image is required!"
-                  : "Failed to create product!",
+                  : "Failed to update product!",
             ),
             backgroundColor: Colors.red,
           ),
