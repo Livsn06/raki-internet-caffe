@@ -17,7 +17,7 @@ class CartSection extends StatelessWidget {
       color: UIColors.backgroundColor,
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF2E7D32),
+          backgroundColor: UIColors.tertiaryColor,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
