@@ -14,6 +14,7 @@ class CreateProductScreen extends StatelessWidget {
   final Category category;
   @override
   Widget build(BuildContext context) {
+    const _green = Color(0xFF2E7D32);
     return Scaffold(
       backgroundColor: UIColors.backgroundColor,
       appBar: AppBar(
@@ -30,7 +31,7 @@ class CreateProductScreen extends StatelessWidget {
           "Create Item",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: _green,
       ),
       body: CreateProductScreenBody(category: category),
     );
@@ -76,63 +77,78 @@ class CreateProductScreenBody extends StatelessWidget {
       }
     }
 
-    return Container(
-      padding: const EdgeInsets.all(12.0),
-      width: double.infinity,
-      height: double.infinity,
+    const _green = Color(0xFF2E7D32);
+    return Center(
       child: SingleChildScrollView(
-        child: Form(
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                InkWell(
-                  onTap: () =>
-                      isLoading ? null : createProductProvider.pickImage(),
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.black,
-                    backgroundImage: image != null
-                        ? FileImage(File(image.path))
-                        : null,
-                    child: image == null
-                        ? const Icon(Icons.camera_alt, color: Colors.white)
-                        : null,
-                  ),
-                ),
-                vGap(16),
-                TextFormField(
-                  controller: productName,
-                  decoration: const InputDecoration(
-                    label: Text("Product Name"),
-                  ),
-                  validator: (value) =>
-                      createProductProvider.validateName(value),
-                ),
-                vGap(16),
-                TextFormField(
-                  controller: price,
-                  decoration: const InputDecoration(label: Text("Price")),
-                  validator: (value) =>
-                      createProductProvider.validatePrice(value),
-                ),
-                vGap(16),
-                TextFormField(
-                  controller: variantLabel,
-                  decoration: const InputDecoration(
-                    label: Text("Variant Label"),
-                  ),
-                  validator: (value) =>
-                      createProductProvider.validateVariantLabel(value),
-                ),
-
-                vGap(16),
-                PrimaryButton(
-                  label: "Create",
-                  isLoading: isLoading,
-                  onTap: create,
+        padding: const EdgeInsets.all(16.0),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.04),
+                  blurRadius: 16,
                 ),
               ],
+            ),
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  InkWell(
+                    onTap: () =>
+                        isLoading ? null : createProductProvider.pickImage(),
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: _green.withOpacity(0.12),
+                      backgroundImage: image != null
+                          ? FileImage(File(image.path))
+                          : null,
+                      child: image == null
+                          ? Icon(Icons.camera_alt, color: _green)
+                          : null,
+                    ),
+                  ),
+                  vGap(16),
+                  TextFormField(
+                    controller: productName,
+                    decoration: const InputDecoration(
+                      label: Text("Product Name"),
+                    ),
+                    validator: (value) =>
+                        createProductProvider.validateName(value),
+                  ),
+                  vGap(16),
+                  TextFormField(
+                    controller: price,
+                    decoration: const InputDecoration(label: Text("Price")),
+                    validator: (value) =>
+                        createProductProvider.validatePrice(value),
+                  ),
+                  vGap(16),
+                  TextFormField(
+                    controller: variantLabel,
+                    decoration: const InputDecoration(
+                      label: Text("Variant Label"),
+                    ),
+                    validator: (value) =>
+                        createProductProvider.validateVariantLabel(value),
+                  ),
+                  vGap(18),
+                  PrimaryButton(
+                    label: "Create",
+                    isLoading: isLoading,
+                    onTap: create,
+                    backgroundColor: _green,
+                    foregroundColor: Colors.white,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
