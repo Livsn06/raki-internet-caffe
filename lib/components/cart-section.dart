@@ -14,14 +14,15 @@ class CartSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14.0),
       width: double.infinity,
-      color: Colors.black,
+      color: UIColors.backgroundColor,
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
-          backgroundColor: UIColors.tertiaryColor,
+          backgroundColor: const Color(0xFF2E7D32),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(12.0),
           ),
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
         ),
         onPressed: () {
           Navigator.of(
