@@ -51,16 +51,16 @@ class _ProductSectionState extends State<ProductSection> {
     double childAspectRatio = 0.7;
 
     if (screenWidth < 600) {
-      crossAxisCount = 1;
+      crossAxisCount = 2;
       childAspectRatio = 0.65;
     } else if (screenWidth < 900) {
-      crossAxisCount = 2;
+      crossAxisCount = 4;
       childAspectRatio = 0.7;
     } else if (screenWidth < 1200) {
-      crossAxisCount = 3;
+      crossAxisCount = 5;
       childAspectRatio = 0.75;
     } else {
-      crossAxisCount = 4;
+      crossAxisCount = 5;
       childAspectRatio = 0.8;
     }
 

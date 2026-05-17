@@ -10,6 +10,19 @@ class ProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Determine responsive grid properties based on screen size
+    int categoryFlex = 1;
+    int contentFlex = 5;
+
+    if (screenWidth > 600) {
+      categoryFlex = 1;
+      contentFlex = 5;
+    } else {
+      categoryFlex = 2;
+      contentFlex = 5;
+    }
     const _green = Color(0xFF2E7D32);
     return Scaffold(
       backgroundColor: UIColors.backgroundColor,
@@ -37,8 +50,8 @@ class ProductScreen extends StatelessWidget {
           Flexible(
             child: Row(
               children: [
-                Expanded(flex: 2, child: ProductCategorySection()),
-                Expanded(flex: 5, child: ProductContentSection()),
+                Expanded(flex: categoryFlex, child: ProductCategorySection()),
+                Expanded(flex: contentFlex, child: ProductContentSection()),
               ],
             ),
           ),
