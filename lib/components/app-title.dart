@@ -10,7 +10,7 @@ class AppTitle extends StatelessWidget {
       text: TextSpan(
         children: [
           TextSpan(
-            text: "Raki",
+            text: "Raki's",
             style: TextStyle(
               color: UIColors.secondaryColor,
               fontSize: fontSize,
